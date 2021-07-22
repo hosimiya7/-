@@ -1,13 +1,28 @@
 window.onload = () => {
+	/* review ここでこのアプリで仕様するエレメントを全て変数化する
+	*　もっと複雑なアプリになると、毎回エレメントを取得するとすぐにメモリを食いつぶして
+	*　動作が遅くなるので、固定のエレメントだけを使用する物なら、まとめて変数にぶち込む方が良い
+	*/
+	/* review 「;」は付けないように習った？ 別に良いけど、古いjsの人は「;」を付けないと怒るかも。
+	*　jsの書き方がES6なので、IE11は捨ててるだろうから；は無くて良いけど、
+	*　IEが全盛の頃のJSエンジニアは;で何回も泣いたからwww
+	*/
+ 	const elms = {
+			main : document.getElementById('main'),
+			restart : document.getElementById('restart'),
+			selected: document.getElementById('selected')
+	}
 
-    const omikuji = new Omikuji()
+
+    const omikuji = new Omikuji(elms)
 
     // mainが押されたら止める
-    document.getElementById('main').onclick = () => {
+	 // review エレメントは変数化して使う。
+    elms.main.onclick = () => {
         omikuji.stopOmikuji()
     }
     // restartがおされたら再開する
-    document.getElementById('restart').onclick = () => {
+    elms.restart.onclick = () => {
         omikuji.restartOmikuji()
     }
 
@@ -21,8 +36,9 @@ class Omikuji {
     selected_num
     interval
     omikuji
+	 elms
 
-    constructor (){
+    constructor (elms){
         this.cur_num = 0
         this.selected_num = 0
         this.interval = 0
@@ -35,6 +51,7 @@ class Omikuji {
             "凶",
             "大凶"
         ]
+		  this.elms = elms
     }
 
     // おみくじを順で表示する
@@ -44,7 +61,7 @@ class Omikuji {
     }
 
     setText = (value) => {
-        document.getElementById('selected').textContent = value
+        this.elms.selected.textContent = value
     }
 
     //　おみくじを配列から選ぶ
@@ -70,4 +87,3 @@ class Omikuji {
         this.start()
     }
 }
-
